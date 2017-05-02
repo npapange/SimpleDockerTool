@@ -11,7 +11,7 @@ in two steps: first the container is created and then it is started.
 resource usage of each container (similar to docker stats) and to consolidate logs from all the containers to a single
 log file.
     For the purpose of this assignment, the image and subsequent containers will contain a single simple 'Hello World!'
-flask web app. After a container is started this app can be found at: _____________________
+flask web app. After a container is started this app can be found at: http://192.168.99.100:<container port>/
 
 
 Notes on Implementation:
@@ -20,9 +20,9 @@ ContainerManager creates instances of the DockerImage and DockerContainer classe
 perform various operations on the images and containers.
     For the monitoring and logging, the goal was to have the information in real time. As such, the methods stats() and
 logs() were called with the argument "stream=True". This returns the output of each method as a blocking generator.
-Since it was required to at the same time get the logs and monitoring statistics from an arbitrary number of containers,
+Since it was required at the same time to get the logs and monitoring statistics from an arbitrary number of containers,
 threads were used to iterate over each generator (two threads per container, one for the logs, the other for the monitoring).
-____________if I implement the q=quit in a thread.
+The application will continue to output the logs/resource data until the user exits the application.
     The logging configuration is located in the "logging.conf" file. It prints messages in the console as well as saves
 the log messages in a file called SimpleDockerApi.log. So as not to "bombard" the user with too many logging information,
 the log level for the console output is set to "INFO", whereas for the log file it is set to "DEBUG", so that all log
@@ -47,7 +47,6 @@ Usage:
 in the root package directory). This script takes a number of parameters, all of which are optional, so that the user
 can quickly test it with the default values. The user can provide the number of the image to be built, the number of
 containers, their name and the ports which the simple flask api inside the container will listen to.
-_____what to press to quit.
 
 
 Tests:

@@ -5,7 +5,7 @@ import logging
 import logging.config
 import sys
 
-from simple_docker_tool.simple_docker_api.container_manager import ContainerManager
+from simple_docker_api.container_manager import ContainerManager
 
 __author__ = 'Nikitas Papangelopoulos'
 
@@ -32,13 +32,13 @@ def main(image_name, container_number, container_ports, container_names):
             cm.create_container(image.id, port=container_ports[i])
 
     # Checking that all containers were created successfully
-    all_success = all([container.created_successfully for container in cm.available_containers()])
+    all_success = all([container.created_successfully for container in cm.available_containers().values()])
     if all_success:
         logger.debug('All containers created successfully')
         # Starting the containers.
 
     # Starting the created containers
-    for container in [container for container in cm.available_containers() if container.created_successfully]:
+    for container in [container for container in cm.available_containers().values() if container.created_successfully]:
         cm.start_container(container.id)
         # Verifying that each one is running
         if cm.get_container(container.id).status == 'running':
@@ -65,11 +65,11 @@ if __name__ == '__main__':
 
     wrong_input = False
     if args.container_names:
-        if len(args.container_number) != len(args.container_ports) and len(args.container_number) != len(
+        if args.container_number != len(args.container_ports) and len(args.container_number) != len(
                 args.container_names):
             wrong_input = True
     else:
-        if len(args.container_number) != len(args.container_ports):
+        if args.container_number != len(args.container_ports):
             wrong_input = True
 
     if wrong_input:
