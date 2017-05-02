@@ -1,0 +1,4 @@
+pypiwin32
+docker
+numpy
+mock
